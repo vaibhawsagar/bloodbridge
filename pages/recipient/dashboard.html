@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipient Dashboard - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+</head>
+<body>
+    <div class="layout">
+        <nav class="sidebar" id="sidebar">
+            <a href="./dashboard.html" class="sidebar-brand">
+                <div class="sidebar-logo"><i class="fa-solid fa-droplet"></i></div>
+                <div class="sidebar-brand-text"><h2>BloodBridge</h2><small>Blood Bank System</small></div>
+            </a>
+            <div class="sidebar-nav">
+                <div class="nav-section-label">Recipient Menu</div>
+                <div class="sidebar-item active"><a href="./dashboard.html" class="sidebar-link"><i class="fa-solid fa-gauge"></i><span class="link-label">Dashboard</span></a></div>
+                <div class="sidebar-item"><a href="./profile.html" class="sidebar-link"><i class="fa-solid fa-building-columns"></i><span class="link-label">My Profile</span></a></div>
+                <div class="sidebar-item"><a href="./blood-availability.html" class="sidebar-link"><i class="fa-solid fa-magnifying-glass"></i><span class="link-label">Blood Availability</span></a></div>
+                <div class="sidebar-item"><a href="./request-blood.html" class="sidebar-link"><i class="fa-solid fa-hand-holding-droplet"></i><span class="link-label">Request Blood</span></a></div>
+                <div class="sidebar-item"><a href="./request-tracking.html" class="sidebar-link"><i class="fa-solid fa-route"></i><span class="link-label">Track Requests</span></a></div>
+                <div class="sidebar-item"><a href="./notifications.html" class="sidebar-link"><i class="fa-solid fa-bell"></i><span class="link-label">Notifications</span><span class="notif-badge" id="notif-count" style="display:none">0</span></a></div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="sidebar-user"><div class="sidebar-user-avatar" id="userInitial">R</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="userName">Recipient</div><div class="sidebar-user-role">Hospital</div></div></div>
+                <a href="../../pages/auth/login.html" class="sidebar-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+            </div>
+        </nav>
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+                <div class="topbar-title">Dashboard</div>
+                <div class="topbar-actions">
+                    <a href="./notifications.html" class="topbar-action"><i class="fa-regular fa-bell"></i><span class="notif-dot" id="notifDot" style="display:none"></span></a>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <div id="approvalAlert" class="alert alert-warning" style="display: none;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Your account is pending approval. You cannot request blood until approved.
+                </div>
+
+                <div class="welcome-card card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 id="welcomeName">Welcome, Hospital</h3>
+                                <p class="text-muted" id="welcomeAffiliation">Affiliation: </p>
+                            </div>
+                            <div id="approvalStatusBadge"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-4 gap-4 mb-4">
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="stat-icon"><i class="fa-solid fa-file-waveform"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-label">Total Requests</div>
+                                <div class="stat-value" id="statTotal">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="stat-icon text-warning"><i class="fa-solid fa-hourglass-half"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-label">Pending Requests</div>
+                                <div class="stat-value" id="statPending">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="stat-icon text-info"><i class="fa-solid fa-thumbs-up"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-label">Approved Requests</div>
+                                <div class="stat-value" id="statApproved">0</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-card card">
+                        <div class="card-body">
+                            <div class="stat-icon text-success"><i class="fa-solid fa-check-double"></i></div>
+                            <div class="stat-details">
+                                <div class="stat-label">Fulfilled Requests</div>
+                                <div class="stat-value" id="statFulfilled">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Recent Requests</h4>
+                                <a href="./request-tracking.html" class="btn btn-sm btn-outline">View All</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table" id="recentRequestsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Request ID</th>
+                                                <th>Blood Group</th>
+                                                <th>Qty</th>
+                                                <th>Urgency</th>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Data injected by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-1">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h4 class="card-title">Quick Actions</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-column gap-2">
+                                    <a href="./blood-availability.html" class="btn btn-primary w-100 text-start"><i class="fa-solid fa-magnifying-glass me-2"></i> Check Blood Availability</a>
+                                    <a href="./request-blood.html" class="btn btn-primary w-100 text-start"><i class="fa-solid fa-hand-holding-droplet me-2"></i> New Blood Request</a>
+                                    <a href="./request-tracking.html" class="btn btn-outline w-100 text-start"><i class="fa-solid fa-route me-2"></i> Track Requests</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Recent Notifications</h4>
+                                <a href="./notifications.html" class="btn btn-sm btn-text">View All</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="notification-list p-2" id="recentNotifications">
+                                    <!-- Data injected by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="../../js/data/mock-data.js"></script>
+    <script src="../../js/auth/session.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/status.js"></script>
+    <script src="../../js/utils/validation.js"></script>
+    <script src="../../js/services/notification-service.js"></script>
+    <script src="../../js/services/inventory-service.js"></script>
+    <script src="../../js/services/request-service.js"></script>
+    <script src="../../js/services/activity-log-service.js"></script>
+    <script src="../../js/recipient/recipient-dashboard.js"></script>
+</body>
+</html>

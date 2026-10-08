@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BloodBridge</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0b1120;
+            background-image: radial-gradient(circle at top center, rgba(198, 40, 40, 0.15) 0%, rgba(11, 17, 32, 1) 70%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 2rem 1rem;
+            color: #1a1a2e;
+            box-sizing: border-box;
+        }
+        
+        .auth-card { 
+            background: #ffffff; 
+            padding: 2.5rem 3rem; 
+            border-radius: 20px; 
+            box-shadow: 0 12px 32px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.05); 
+            width: 100%; 
+            max-width: 780px; 
+            position: relative;
+        }
+
+        @media (max-width: 600px) {
+            .auth-card { padding: 2rem 1.5rem; border-radius: 16px; }
+        }
+
+        /* Branding Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .navbar-brand-premium {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.6rem; 
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+        }
+        .brand-logo-svg {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 2px 6px rgba(255, 82, 82, 0.3));
+        }
+        .brand-wordmark {
+            font-weight: 800; 
+            font-size: 1.4rem; 
+            color: #111827; 
+            letter-spacing: -0.5px;
+        }
+        #pageTitle {
+            font-weight: 800; 
+            font-size: 1.6rem; 
+            color: #111827;
+            margin: 0.25rem 0 0.25rem 0;
+        }
+        .subtitle {
+            color: #6B7280; 
+            font-size: 0.95rem; 
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            color: #9CA3AF;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .progress-indicator .step {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .progress-indicator .step.active {
+            color: #C62828;
+        }
+        .progress-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .progress-indicator .line {
+            height: 2px;
+            width: 40px;
+            background: #E5E7EB;
+        }
+
+        /* Sections */
+        .section-block {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #4B5563;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .section-desc {
+            font-size: 0.85rem;
+            color: #9CA3AF;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Form Grid */
+        .grid-2 { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1rem; 
+        }
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+
+        /* Inputs */
+        .form-group { position: relative; margin-bottom: 1rem; }
+        .form-group:last-child { margin-bottom: 0; }
+        .form-label { 
+            display: block; 
+            margin-bottom: 0.35rem; 
+            font-weight: 600; 
+            color: #374151; 
+            font-size: 0.85rem;
+        }
+        .form-control { 
+            width: 100%; 
+            height: 44px;
+            padding: 0 1rem; 
+            border: 1px solid #D1D5DB; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: #111827;
+            transition: all 0.2s ease;
+            background: #F9FAFB;
+        }
+        textarea.form-control {
+            height: auto;
+            padding: 0.75rem 1rem;
+        }
+        .form-control:hover {
+            border-color: #9CA3AF;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: #ff5252;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.15);
+        }
+        .form-control::placeholder {
+            color: #9CA3AF;
+        }
+        .password-toggle { 
+            position: absolute; 
+            right: 14px; 
+            top: 34px; 
+            cursor: pointer; 
+            color: #9CA3AF; 
+            transition: color 0.3s;
+        }
+        .password-toggle:hover { color: #4B5563; }
+
+        /* Specific role sections */
+        #donorSection {
+            background: rgba(254, 242, 242, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #FEE2E2;
+        }
+        #donorSection .section-title { color: #B91C1C; }
+        
+        #recipientSection {
+            background: rgba(239, 246, 255, 0.4);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #DBEAFE;
+        }
+        #recipientSection .section-title { color: #1D4ED8; }
+
+        .eligibility-hint {
+            font-size: 0.8rem;
+            color: #B91C1C;
+            margin-top: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Button */
+        .btn-register {
+            width: 100%;
+            margin-top: 0.5rem;
+            height: 48px;
+            font-size: 1.05rem;
+            background: #C62828;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: 0 4px 12px rgba(198, 40, 40, 0.2);
+            font-family: inherit;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            background: #ff5252;
+            box-shadow: 0 6px 16px rgba(255, 82, 82, 0.3);
+        }
+        .btn-register:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        .btn-register:disabled {
+            background: #D1D5DB;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Footer */
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .login-text {
+            color: #6B7280;
+            font-size: 0.95rem;
+        }
+        .login-link {
+            color: #C62828;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.3s;
+            margin-left: 0.25rem;
+        }
+        .login-link:hover {
+            color: #ff5252;
+        }
+        .trust-message {
+            margin-top: 1.25rem;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Error block */
+        .alert-danger {
+            display: none; 
+            margin-bottom: 1.5rem; 
+            padding: 1rem; 
+            background-color: #FEF2F2; 
+            color: #991B1B; 
+            border-radius: 8px; 
+            border: 1px solid #F87171;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        
+        <div class="brand-header">
+            <a href="../../index.html" class="navbar-brand-premium">
+                <img src="../../favicon.svg" alt="BloodBridge Logo" class="brand-logo-svg">
+                <span class="brand-wordmark">BloodBridge</span>
+            </a>
+            <h2 id="pageTitle">Register</h2>
+            <p class="subtitle" id="pageSubtitle">Create your profile to join the network.</p>
+        </div>
+
+        <div id="registerError" class="alert-danger"></div>
+
+        <form id="registerForm">
+            <!-- SECTION 1: Personal Info -->
+            <div class="section-block">
+                <div class="section-title">Personal Information</div>
+                <div class="section-desc">Basic information required for your BloodBridge profile.</div>
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Full Name / Hospital Name</label>
+                    <input type="text" id="name" class="form-control" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" class="form-control" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" required placeholder="+1 234 567 8900">
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" required placeholder="Create a password">
+                        <span class="password-toggle" id="togglePassword"><i class="fa-solid fa-eye"></i></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" required placeholder="Confirm password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" class="form-label">Address</label>
+                    <textarea id="address" class="form-control" rows="2" required placeholder="Enter your full address"></textarea>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Donor Specific Fields -->
+            <div id="donorSection" style="display: none;" class="section-block">
+                <div class="section-title"><i class="fa-solid fa-hand-holding-droplet" style="margin-right: 0.3rem;"></i> Donor Details</div>
+                <div class="section-desc" style="color: #F87171;">Eligibility and donation-related information</div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="bloodGroup" class="form-label">Blood Group</label>
+                        <select id="bloodGroup" class="form-control">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option><option value="A-">A-</option>
+                            <option value="B+">B+</option><option value="B-">B-</option>
+                            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                            <option value="O+">O+</option><option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" id="age" class="form-control" min="18" max="65" placeholder="e.g. 25">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="weight" class="form-label">Weight (kg)</label>
+                        <input type="number" id="weight" class="form-control" min="45" placeholder="e.g. 65">
+                    </div>
+                    <div class="form-group">
+                        <label for="haemoglobin" class="form-label">Haemoglobin (g/dL)</label>
+                        <input type="number" id="haemoglobin" class="form-control" step="0.1" min="0" placeholder="e.g. 13.5">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lastDonationDate" class="form-label">Last Donation Date <span style="font-weight: 400; color: #9CA3AF;">(Optional)</span></label>
+                    <input type="date" id="lastDonationDate" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="healthHistory" class="form-label">Health History <span style="font-weight: 400; color: #9CA3AF;">(Optional)</span></label>
+                    <textarea id="healthHistory" class="form-control" rows="2" placeholder="Any chronic diseases, recent surgeries, or medications..."></textarea>
+                </div>
+                <div class="eligibility-hint">
+                    <i class="fa-solid fa-circle-info"></i> These details help determine your current donation eligibility.
+                </div>
+            </div>
+
+            <!-- SECTION 3: Recipient Specific Fields -->
+            <div id="recipientSection" style="display: none;" class="section-block">
+                <div class="section-title"><i class="fa-solid fa-hospital" style="margin-right: 0.3rem;"></i> Hospital / Recipient Details</div>
+                <div class="section-desc" style="color: #60A5FA;">Organization and request management information</div>
+                
+                <div class="form-group">
+                    <label for="affiliation" class="form-label">Hospital / Organization Affiliation</label>
+                    <input type="text" id="affiliation" class="form-control" placeholder="Enter Hospital Name or Affiliation">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">Register Profile</button>
+        </form>
+
+        <div class="auth-footer">
+            <div class="login-text">
+                Already have an account? <a href="login.html" class="login-link">Login here</a>
+            </div>
+            <div class="trust-message">
+                <i class="fa-solid fa-lock"></i> Your information is securely used to manage your profile and eligibility.
+            </div>
+        </div>
+    </div>
+
+    <!-- Foundation JS -->
+    <script src="../../js/data/mock-data.js"></script>
+    <script src="../../js/auth/session.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/status.js"></script>
+    <script src="../../js/utils/validation.js"></script>
+    <script src="../../js/services/notification-service.js"></script>
+    <script src="../../js/services/inventory-service.js"></script>
+    <script src="../../js/services/request-service.js"></script>
+    <script src="../../js/services/activity-log-service.js"></script>
+    
+    <!-- Page JS -->
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role');
+        
+        const titleEl = document.getElementById('pageTitle');
+        const subtitleEl = document.getElementById('pageSubtitle');
+        const loginLinkEl = document.querySelector('.login-link');
+        
+        if (role === 'donor') {
+            titleEl.innerText = 'Register as Donor';
+            subtitleEl.innerText = 'Create your donor profile to manage eligibility, camps and donation history.';
+            document.getElementById('donorSection').style.display = 'block';
+            if(loginLinkEl) loginLinkEl.href = 'login.html?role=donor';
+        } else if (role === 'recipient') {
+            titleEl.innerText = 'Register as Recipient';
+            subtitleEl.innerText = 'Create your profile to request blood components and view live inventory.';
+            document.getElementById('recipientSection').style.display = 'block';
+            if(loginLinkEl) loginLinkEl.href = 'login.html?role=recipient';
+        } else {
+            titleEl.innerText = 'Register';
+            subtitleEl.innerText = 'Create your profile to join the network.';
+        }
+    </script>
+    <script src="../../js/auth/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Eligibility - BloodBridge</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <style>
+        .check-item { display: flex; align-items: center; margin-bottom: 0.5rem; padding: 0.5rem; border-radius: 4px; background: #f8f9fa; }
+        .check-icon { margin-right: 10px; font-size: 1.2rem; }
+        .check-pass .check-icon { color: var(--success-color); }
+        .check-fail .check-icon { color: var(--danger-color); }
+        .result-panel { margin-top: 2rem; padding: 1.5rem; border-radius: 8px; text-align: center; }
+        .result-eligible { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .result-not-eligible { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <nav class="sidebar" id="sidebar">
+        <a href="./dashboard.html" class="sidebar-brand">
+            <div class="sidebar-logo"><i class="fa-solid fa-droplet"></i></div>
+            <div class="sidebar-brand-text"><h2>BloodBridge</h2><small>Blood Bank System</small></div>
+        </a>
+        <div class="sidebar-nav">
+            <div class="nav-section-label">Donor Menu</div>
+            <div class="sidebar-item"><a href="./dashboard.html" class="sidebar-link"><i class="fa-solid fa-gauge"></i><span class="link-label">Dashboard</span></a></div>
+            <div class="sidebar-item"><a href="./profile.html" class="sidebar-link"><i class="fa-solid fa-user"></i><span class="link-label">My Profile</span></a></div>
+            <div class="sidebar-item"><a href="./eligibility.html" class="sidebar-link active"><i class="fa-solid fa-heart-pulse"></i><span class="link-label">Check Eligibility</span></a></div>
+            <div class="sidebar-item"><a href="./camps.html" class="sidebar-link"><i class="fa-solid fa-tent-medical"></i><span class="link-label">Donation Camps</span></a></div>
+            <div class="sidebar-item"><a href="./donation-history.html" class="sidebar-link"><i class="fa-solid fa-clock-rotate-left"></i><span class="link-label">Donation History</span></a></div>
+            <div class="sidebar-item"><a href="./certificate.html" class="sidebar-link"><i class="fa-solid fa-certificate"></i><span class="link-label">My Certificate</span></a></div>
+            <div class="sidebar-item"><a href="./notifications.html" class="sidebar-link"><i class="fa-solid fa-bell"></i><span class="link-label">Notifications</span><span class="notif-badge" id="notif-count" style="display:none">0</span></a></div>
+        </div>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar" id="userInitial">D</div>
+                <div class="sidebar-user-info">
+                    <div class="sidebar-user-name" id="userName">Donor</div>
+                    <div class="sidebar-user-role">Donor</div>
+                </div>
+            </div>
+            <a href="../../pages/auth/login.html" class="sidebar-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+        <header class="navbar">
+            <div class="navbar-left">
+                <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+                <div class="navbar-breadcrumb">Donor Portal / <span id="pageTitle">Check Eligibility</span></div>
+            </div>
+            <div class="navbar-right">
+                <button class="navbar-notif-btn" onclick="window.location.href='./notifications.html'">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="navbar-notif-dot" id="notifDot" style="display:none"></span>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-container">
+            <div class="grid-2-col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Eligibility Criteria</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Requirement</th>
+                                </tr>
+                            </thead>
+                            <tbody id="criteriaTableBody">
+                                <tr><td colspan="2">Loading...</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="mt-4 text-center">
+                            <button id="checkBtn" class="btn btn-primary"><i class="fa-solid fa-stethoscope"></i> Re-check Eligibility</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Checklist & Result</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="checklistContainer">
+                            <!-- Checklist items injected here -->
+                        </div>
+                        <div id="resultPanel" class="result-panel" style="display: none;">
+                            <h3 id="resultHeading"></h3>
+                            <p id="resultText"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../../js/data/mock-data.js"></script>
+    <script src="../../js/auth/session.js"></script>
+    <script src="../../js/utils/helpers.js"></script>
+    <script src="../../js/utils/status.js"></script>
+    <script src="../../js/utils/validation.js"></script>
+    <script src="../../js/services/notification-service.js"></script>
+    <script src="../../js/services/inventory-service.js"></script>
+    <script src="../../js/services/request-service.js"></script>
+    <script src="../../js/services/activity-log-service.js"></script>
+    <script src="../../js/donor/eligibility.js"></script>
+</body>
+</html>

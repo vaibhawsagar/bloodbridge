@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Role - BloodBridge</title>
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../css/global.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #0b1120;
+            background-image: radial-gradient(circle at top center, rgba(198, 40, 40, 0.15) 0%, rgba(11, 17, 32, 1) 70%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 3rem 1rem;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+        
+        .selection-container { 
+            max-width: 900px; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        /* Top Branding */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+        .navbar-brand-premium {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 0.75rem; 
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+        .brand-logo-svg {
+            width: 42px;
+            height: 42px;
+            filter: drop-shadow(0 4px 12px rgba(255, 82, 82, 0.4));
+        }
+        .brand-wordmark {
+            font-weight: 800; 
+            font-size: 2rem; 
+            color: #ffffff; 
+            letter-spacing: -0.5px;
+        }
+        .brand-header h1 {
+            font-weight: 800; 
+            font-size: 2.2rem; 
+            margin: 0 0 0.5rem 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .brand-header p {
+            color: #90A4AE; 
+            font-size: 1.15rem; 
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Cards Grid */
+        .cards-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 2rem; 
+        }
+        
+        .role-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            min-height: 400px;
+            box-sizing: border-box;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 82, 82, 0.3);
+            box-shadow: 0 15px 40px rgba(198, 40, 40, 0.2);
+        }
+        
+        /* Icon Styling */
+        .icon-wrapper {
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .role-card:hover .icon-wrapper {
+            transform: scale(1.1);
+        }
+        .icon-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px; height: 80px;
+            background: radial-gradient(circle, rgba(255,82,82,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+        .role-card:hover .icon-wrapper::after {
+            background: radial-gradient(circle, rgba(255,82,82,0.3) 0%, transparent 70%);
+            width: 110px; height: 110px;
+        }
+        .icon-wrapper i {
+            color: #ff5252;
+        }
+        
+        /* Card Typography */
+        .role-card h2 { 
+            color: #ffffff; 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            margin: 0 0 1rem 0; 
+        }
+        .role-card p { 
+            color: #B0BEC5; 
+            line-height: 1.6; 
+            margin: 0 0 2.5rem 0; 
+            font-size: 1rem; 
+            flex-grow: 1; 
+        }
+        
+        /* Buttons */
+        .btn-pill {
+            border-radius: 50px;
+            padding: 0.85rem 1.5rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            text-decoration: none;
+            cursor: pointer;
+            background: #c62828;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(198, 40, 40, 0.3);
+            font-size: 1.05rem;
+            letter-spacing: 0.5px;
+        }
+        .btn-pill:hover {
+            transform: translateY(-3px);
+            background: #ff5252;
+            box-shadow: 0 8px 24px rgba(255, 82, 82, 0.5);
+            border-color: rgba(255, 138, 128, 0.4);
+        }
+        .btn-pill:active {
+            transform: translateY(1px) scale(0.98);
+        }
+        
+        /* Bottom Links */
+        .bottom-links {
+            margin-top: 4rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .login-text { 
+            color: #90A4AE; 
+            font-size: 1.05rem; 
+        }
+        .login-link {
+            color: #ff5252;
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .login-link:hover { 
+            color: #ff8a80; 
+            text-shadow: 0 0 12px rgba(255, 82, 82, 0.4); 
+        }
+        
+        .back-home {
+            color: #78909C;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+        .back-home:hover { 
+            color: #e0e0e0; 
+            transform: translateX(-4px); 
+        }
+    </style>
+</head>
+<body>
+    <div class="selection-container">
+        
+        <!-- Header Branding -->
+        <div class="brand-header">
+            <a href="../../index.html" class="navbar-brand-premium">
+                <img src="../../favicon.svg" alt="BloodBridge Logo" class="brand-logo-svg">
+                <span class="brand-wordmark">BloodBridge</span>
+            </a>
+            <h1>Join BloodBridge</h1>
+            <p>Select your role to continue registration</p>
+        </div>
+
+        <!-- Role Cards -->
+        <div class="cards-grid">
+            <div class="role-card">
+                <div>
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-hand-holding-heart fa-4x"></i>
+                    </div>
+                    <h2>I am a Blood Donor</h2>
+                    <p>Register to donate blood, save lives, and seamlessly track your donation history and eligibility.</p>
+                </div>
+                <a href="register.html?role=donor" class="btn-pill">Register as Donor</a>
+            </div>
+
+            <div class="role-card">
+                <div>
+                    <div class="icon-wrapper">
+                        <i class="fa-solid fa-hospital fa-4x"></i>
+                    </div>
+                    <h2>I am a Hospital / Recipient</h2>
+                    <p>Register to request blood components, view live inventory, and manage critical patient needs.</p>
+                </div>
+                <a href="register.html?role=recipient" class="btn-pill">Register as Recipient</a>
+            </div>
+        </div>
+
+        <!-- Bottom Links -->
+        <div class="bottom-links">
+            <div class="login-text">
+                Already have an account? <a href="login.html" class="login-link">Login here</a>
+            </div>
+            <div>
+                <a href="../../index.html" class="back-home">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Home
+                </a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

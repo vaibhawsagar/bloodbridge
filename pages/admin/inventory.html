@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BloodBridge - Inventory Management</title>
+  <link rel="stylesheet" href="../../css/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .bg-card { background: white; padding: 1rem; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border-top: 4px solid var(--primary-color); }
+    .bg-card h3 { color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1.5rem; }
+    .bg-card .count { font-size: 1.25rem; font-weight: bold; }
+    .toolbar { display: flex; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem; }
+    .filters { display: flex; gap: 1rem; }
+    .filters select { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .table-responsive { background: white; border-radius: 8px; padding: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+    .action-btn { background: none; border: none; cursor: pointer; color: var(--primary-color); font-size: 1.1rem; margin-right: 0.5rem; }
+    .action-btn.delete { color: #dc3545; }
+    .warning-icon { color: #ffc107; margin-left: 0.5rem; }
+    
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+    .modal-content { background-color: #fff; margin: 10% auto; padding: 2rem; border-radius: 8px; width: 90%; max-width: 500px; }
+    .close { float: right; font-size: 1.5rem; font-weight: bold; cursor: pointer; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.5rem; }
+    .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="app-container admin-layout">
+    <nav class="sidebar" id="sidebar">
+      <a href="./dashboard.html" class="sidebar-brand">
+        <div class="sidebar-logo"><i class="fa-solid fa-droplet"></i></div>
+        <div class="sidebar-brand-text"><h2>BloodBridge</h2><small>Admin Panel</small></div>
+      </a>
+      <div class="sidebar-nav">
+        <div class="nav-section-label">Management</div>
+        <div class="sidebar-item"><a href="./dashboard.html" class="sidebar-link"><i class="fa-solid fa-gauge"></i><span class="link-label">Dashboard</span></a></div>
+        <div class="sidebar-item"><a href="./donors.html" class="sidebar-link"><i class="fa-solid fa-users"></i><span class="link-label">Donor Management</span></a></div>
+        <div class="sidebar-item"><a href="./eligibility.html" class="sidebar-link"><i class="fa-solid fa-clipboard-check"></i><span class="link-label">Eligibility Criteria</span></a></div>
+        <div class="sidebar-item"><a href="./inventory.html" class="sidebar-link active"><i class="fa-solid fa-flask"></i><span class="link-label">Blood Inventory</span></a></div>
+        <div class="sidebar-item"><a href="./camps.html" class="sidebar-link"><i class="fa-solid fa-tent-medical"></i><span class="link-label">Donation Camps</span></a></div>
+        <div class="sidebar-item"><a href="./blood-requests.html" class="sidebar-link"><i class="fa-solid fa-hand-holding-droplet"></i><span class="link-label">Blood Requests</span></a></div>
+        <div class="nav-section-label">Reports & Logs</div>
+        <div class="sidebar-item"><a href="./reports.html" class="sidebar-link"><i class="fa-solid fa-chart-bar"></i><span class="link-label">Reports</span></a></div>
+        <div class="sidebar-item"><a href="./notifications.html" class="sidebar-link"><i class="fa-solid fa-bell"></i><span class="link-label">Notifications</span><span class="notif-badge" id="notif-count" style="display:none">0</span></a></div>
+        <div class="sidebar-item"><a href="./activity-log.html" class="sidebar-link"><i class="fa-solid fa-list-check"></i><span class="link-label">Activity Log</span></a></div>
+      </div>
+      <div class="sidebar-footer">
+        <div class="sidebar-user"><div class="sidebar-user-avatar" id="userInitial">A</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="userName">Admin</div><div class="sidebar-user-role">Administrator</div></div></div>
+        <a href="../../pages/auth/login.html" class="sidebar-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </div>
+    </nav>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button id="menuToggle" class="menu-toggle"><i class="fa-solid fa-bars"></i></button>
+        <div class="topbar-title"><h1>Blood Inventory</h1></div>
+        <div class="topbar-actions">
+           <a href="./notifications.html" class="notif-btn">
+             <i class="fa-regular fa-bell"></i>
+             <span class="notif-dot" id="notifDot" style="display:none"></span>
+           </a>
+        </div>
+      </header>
+      
+      <div class="content-wrapper">
+        <div class="summary-cards" id="summaryCards">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="toolbar">
+          <div class="filters">
+            <select id="bgFilter">
+              <option value="All">All Blood Groups</option>
+              <option value="A+">A+</option><option value="A-">A-</option>
+              <option value="B+">B+</option><option value="B-">B-</option>
+              <option value="AB+">AB+</option><option value="AB-">AB-</option>
+              <option value="O+">O+</option><option value="O-">O-</option>
+            </select>
+            <select id="statusFilter">
+              <option value="All">All Statuses</option>
+              <option value="Available">Available</option>
+              <option value="Reserved">Reserved</option>
+              <option value="Issued">Issued</option>
+              <option value="Expired">Expired</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="addUnitBtn"><i class="fa-solid fa-plus"></i> Add New Unit</button>
+        </div>
+
+        <div class="table-responsive">
+          <table id="inventoryTable">
+            <thead>
+              <tr>
+                <th>Unit ID</th>
+                <th>Blood Group</th>
+                <th>Quantity (ml)</th>
+                <th>Collection Date</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="addUnitModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeAddModal">&times;</span>
+      <h2>Add Blood Unit</h2>
+      <form id="addUnitForm">
+        <div class="form-group">
+          <label>Blood Group</label>
+          <select id="unitBg" required>
+            <option value="">Select...</option>
+            <option value="A+">A+</option><option value="A-">A-</option>
+            <option value="B+">B+</option><option value="B-">B-</option>
+            <option value="AB+">AB+</option><option value="AB-">AB-</option>
+            <option value="O+">O+</option><option value="O-">O-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Quantity (ml)</label>
+          <input type="number" id="unitQty" value="450" required min="1">
+        </div>
+        <div class="form-group">
+          <label>Collection Date</label>
+          <input type="date" id="unitCollDate" required>
+        </div>
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input type="date" id="unitExpDate" required>
+        </div>
+        <div id="formError" style="color:red;margin-bottom:1rem;display:none;"></div>
+        <button type="submit" class="btn btn-primary" style="width:100%">Add Unit</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="../../js/data/mock-data.js?v=6"></script>
+  <script src="../../js/auth/session.js?v=6"></script>
+  <script src="../../js/utils/helpers.js?v=6"></script>
+  <script src="../../js/utils/status.js?v=6"></script>
+  <script src="../../js/utils/validation.js?v=6"></script>
+  <script src="../../js/services/notification-service.js?v=6"></script>
+  <script src="../../js/services/inventory-service.js?v=6"></script>
+  <script src="../../js/services/request-service.js?v=6"></script>
+  <script src="../../js/services/activity-log-service.js?v=6"></script>
+  <script src="../../js/admin/inventory.js?v=6"></script>
+</body>
+</html>
